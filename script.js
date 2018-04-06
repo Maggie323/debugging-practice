@@ -18,8 +18,9 @@
 // Global variable to hold list of courses.
 var courseList = [];
 // REVIEW: Would this be safer if variable was scoped to window.onload or addACourse functions?
-
+	// ME: I really don't know...
 // Assign handlers to page events.
+	//ME: I need to review this code and understand what it does.
 window.onload = function(){
   document.querySelector("form#add-course").addEventListener("submit", addACourse)
 
@@ -28,20 +29,25 @@ window.onload = function(){
   document.querySelector("button#calculate").addEventListener("click", calculateAverage)
   // REVIEW: Would it make more sense to make some handlers anonymous functions,
   // instead of defining them elsewhere and assigning them here?
+		//ME: maybe
 }
 
 // Triggered on form submit. Creates a new course object and pushes it into courseList array,
 // clears content in form fields, prints courseList objects to the page.
 // BUGFIX: This function isn't working properly- nothing gets output to the list on form submit
 function addACourse(){
+	event.preventDefault()
   var grade = parseFloat(this.elements["grade"].value);
+	console.log("grade: ", grade)
   /*
     TODO: validate that "grade" value is a number between 1.0 and 4.0, stop processing if it is not.
+			// ME: I don't know how to do this part. 
 
     Checking 'grade typeof "number"' will always return true because we called parseFloat.
     We must instead check that it's value is not NaN.
 
     REVIEW: could we make it doubly safe by adding an HTML validation as well?
+			//ME: My HTML is now valid. 
   */
 
   // Create the new course with values from the form, push it into array of courses.
@@ -51,6 +57,7 @@ function addACourse(){
   }
 
   courseList.push(newCourse)
+	console.log("courseList: ", courseList)
 
   clearFormFields()
   outputList()
@@ -89,9 +96,20 @@ function clearData(){
 // Prints courseList objects to the page in a readable way.
 function outputList(){
   var list = document.getElementById("course-list");
+	list.innerHTML = ""
+	
+	for(var i=0; i< courseList.length; i++){
+		console.log("name: ", courseList[i].name, "grade: ", courseList[i].grade)
+		
+		var newLi = document.createElement("li")
+		newLi.innerHTML = "name: " + courseList[i].name + "grade: " + courseList[i].grade
+		
+		list.appendChild(newLi)
+	}
+	
   /*
-    TODO: Clear the existing contents of the "list" element. Then, for each object in courseList,
-    create an li element that holds the course's name and grade, and append
-    it to the "list" ul element.
+    TODO: Clear the existing contents of the "list" element. 
+		Then, for each object in courseList,
+    create an li element that holds the course's name and grade, and append it to the "list" ul element.
   */
 }
